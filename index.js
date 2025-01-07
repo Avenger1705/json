@@ -1,40 +1,20 @@
 import jsonfile from "jsonfile";
 import moment from "moment";
 import simpleGit from "simple-git";
-import random from "random";
 
+const git = simpleGit();
 const path = "./data.json";
 
-const markCommit = (x, y) => {
-  const date = moment()
-    .subtract(1, "y")
-    .add(1, "d")
-    .add(x, "w")
-    .add(y, "d")
-    .format();
+// Commit date: January 1, 2025
+const commitDate = moment("2025-01-07T12:00:00").format();
+const data = { date: commitDate };
 
-  const data = {
-    date: date,
-  };
+console.log("📅 Committing on:", commitDate);
 
-  jsonfile.writeFile(path, data, () => {
-    simpleGit().add([path]).commit(date, { "--date": date }).push();
-  });
-};
-
-const makeCommits = (n) => {
-  if(n===0) return simpleGit().push();
-  const x = random.int(0, 54);
-  const y = random.int(0, 6);
-  const date = moment().subtract(1, "y").add(1, "d").add(x, "w").add(y, "d").format();
-
-  const data = {
-    date: date,
-  };
-  console.log(date);
-  jsonfile.writeFile(path, data, () => {
-    simpleGit().add([path]).commit(date, { "--date": date },makeCommits.bind(this,--n));
-  });
-};
-
-makeCommits(1);
+jsonfile.writeFile(path, data, () => {
+  git.add([path])
+    .commit(`Commit on ${commitDate}`, { "--date": commitDate })
+    .then(() => git.push())
+    .then(() => console.log("✅ Commit pushed!"))
+    .catch((err) => console.error("🚨 Git error:", err));
+});

@@ -6,7 +6,7 @@ const git = simpleGit();
 const path = "./data.json";
 
 // Commit date: January 1, 2025
-const commitDate = moment("2025-01-07T12:00:00").format();
+const commitDate = moment("2025-01-08T12:00:00").format();
 const data = { date: commitDate };
 
 console.log("📅 Committing on:", commitDate);
